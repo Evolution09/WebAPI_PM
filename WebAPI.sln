@@ -1,0 +1,65 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27004.2002
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebAPI_PM", "WebAPI_PM\WebAPI_PM.csproj", "{EEB71E63-2E51-40BD-9A25-142D8D1E1BAB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebAPI_PM_Tests", "WebAPI_PM_Tests\WebAPI_PM_Tests.csproj", "{29A89F9D-63BF-4435-89C8-ADDB881954DB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestConsoleApplication", "TestConsoleApplication\TestConsoleApplication.csproj", "{8C8097BB-CE2A-40C0-9BB0-69FF12AE4B0D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|Any CPU = Release|Any CPU
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{EEB71E63-2E51-40BD-9A25-142D8D1E1BAB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EEB71E63-2E51-40BD-9A25-142D8D1E1BAB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EEB71E63-2E51-40BD-9A25-142D8D1E1BAB}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{EEB71E63-2E51-40BD-9A25-142D8D1E1BAB}.Debug|x64.Build.0 = Debug|Any CPU
+		{EEB71E63-2E51-40BD-9A25-142D8D1E1BAB}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{EEB71E63-2E51-40BD-9A25-142D8D1E1BAB}.Debug|x86.Build.0 = Debug|Any CPU
+		{EEB71E63-2E51-40BD-9A25-142D8D1E1BAB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EEB71E63-2E51-40BD-9A25-142D8D1E1BAB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EEB71E63-2E51-40BD-9A25-142D8D1E1BAB}.Release|x64.ActiveCfg = Release|Any CPU
+		{EEB71E63-2E51-40BD-9A25-142D8D1E1BAB}.Release|x64.Build.0 = Release|Any CPU
+		{EEB71E63-2E51-40BD-9A25-142D8D1E1BAB}.Release|x86.ActiveCfg = Release|Any CPU
+		{EEB71E63-2E51-40BD-9A25-142D8D1E1BAB}.Release|x86.Build.0 = Release|Any CPU
+		{29A89F9D-63BF-4435-89C8-ADDB881954DB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{29A89F9D-63BF-4435-89C8-ADDB881954DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{29A89F9D-63BF-4435-89C8-ADDB881954DB}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{29A89F9D-63BF-4435-89C8-ADDB881954DB}.Debug|x64.Build.0 = Debug|Any CPU
+		{29A89F9D-63BF-4435-89C8-ADDB881954DB}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{29A89F9D-63BF-4435-89C8-ADDB881954DB}.Debug|x86.Build.0 = Debug|Any CPU
+		{29A89F9D-63BF-4435-89C8-ADDB881954DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{29A89F9D-63BF-4435-89C8-ADDB881954DB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{29A89F9D-63BF-4435-89C8-ADDB881954DB}.Release|x64.ActiveCfg = Release|Any CPU
+		{29A89F9D-63BF-4435-89C8-ADDB881954DB}.Release|x64.Build.0 = Release|Any CPU
+		{29A89F9D-63BF-4435-89C8-ADDB881954DB}.Release|x86.ActiveCfg = Release|Any CPU
+		{29A89F9D-63BF-4435-89C8-ADDB881954DB}.Release|x86.Build.0 = Release|Any CPU
+		{8C8097BB-CE2A-40C0-9BB0-69FF12AE4B0D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8C8097BB-CE2A-40C0-9BB0-69FF12AE4B0D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8C8097BB-CE2A-40C0-9BB0-69FF12AE4B0D}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{8C8097BB-CE2A-40C0-9BB0-69FF12AE4B0D}.Debug|x64.Build.0 = Debug|Any CPU
+		{8C8097BB-CE2A-40C0-9BB0-69FF12AE4B0D}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{8C8097BB-CE2A-40C0-9BB0-69FF12AE4B0D}.Debug|x86.Build.0 = Debug|Any CPU
+		{8C8097BB-CE2A-40C0-9BB0-69FF12AE4B0D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8C8097BB-CE2A-40C0-9BB0-69FF12AE4B0D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8C8097BB-CE2A-40C0-9BB0-69FF12AE4B0D}.Release|x64.ActiveCfg = Release|Any CPU
+		{8C8097BB-CE2A-40C0-9BB0-69FF12AE4B0D}.Release|x64.Build.0 = Release|Any CPU
+		{8C8097BB-CE2A-40C0-9BB0-69FF12AE4B0D}.Release|x86.ActiveCfg = Release|Any CPU
+		{8C8097BB-CE2A-40C0-9BB0-69FF12AE4B0D}.Release|x86.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {0C0E5824-83CC-40DF-809C-2A583198A468}
+	EndGlobalSection
+EndGlobal
