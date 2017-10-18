@@ -7,8 +7,7 @@ namespace WebAPI_PM
 
     public partial class ProductsContext : DbContext
     {
-        public ProductsContext()
-            : base("name=Products")
+        public ProductsContext() : base("name=Products")
         {
         }
 
