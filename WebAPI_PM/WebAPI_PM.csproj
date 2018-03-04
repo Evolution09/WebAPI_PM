@@ -140,9 +140,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\AddressesController.cs" />
+    <Compile Include="Controllers\CategoryController.cs" />
     <Compile Include="Controllers\MethodsController.cs" />
+    <Compile Include="Controllers\ProducentsController.cs" />
     <Compile Include="Controllers\ProductController.cs" />
-    <Compile Include="Controllers\TestController.cs" />
+    <Compile Include="Controllers\VatController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>

@@ -28,6 +28,24 @@ namespace WebAPI_PM.Controllers
 	        return Ok(prod);
 	    }
 
+        // GET: api/Products/5
+        [ResponseType(typeof(product))]
+	    public IQueryable<product> GetProductsByProducentCode(string Code)
+        {
+            var prodIDs = m_Db.producents.AsEnumerable().Where(X => X.Code == Code).Select(X => X.ID);
+            return m_Db.products.AsEnumerable().ToList()
+                .FindAll(X => prodIDs.Contains(X.ProducentID)).AsQueryable();
+	    }
+
+        // GET: api/Products/5
+        [ResponseType(typeof(product))]
+	    public IQueryable<product> GetProductsByCategoryCode(string Code)
+        {
+            var catIDs = m_Db.category_dict.AsEnumerable().Where(X => X.Code == Code).Select(X => X.ID);
+            return m_Db.products.AsEnumerable().ToList()
+                .FindAll(X => catIDs.Contains(X.CategoryID)).AsQueryable();
+	    }
+
 	    // PUT: api/Products/5
 	    [ResponseType(typeof(void))]
 	    public IHttpActionResult PutProduct(string Code, product Product)
