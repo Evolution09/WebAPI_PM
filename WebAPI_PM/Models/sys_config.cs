@@ -12,16 +12,11 @@ namespace WebAPI_PM.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class product
+    public partial class sys_config
     {
-        public int ID { get; set; }
-        public string Name { get; set; }
-        public string Code { get; set; }
-        public string EAN { get; set; }
-        public int ProducentID { get; set; }
-        public int CategoryID { get; set; }
-        public int VATID { get; set; }
-        public string Description { get; set; }
-        public decimal Price { get; set; }
+        public string variable { get; set; }
+        public string value { get; set; }
+        public System.DateTime set_time { get; set; }
+        public string set_by { get; set; }
     }
 }

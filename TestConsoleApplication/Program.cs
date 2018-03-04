@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Text;
 using Newtonsoft.Json.Linq;
-using System.Net;
+using TestConsoleApplication.DtoModels;
 
 namespace TestConsoleApplication
 {
@@ -14,62 +10,41 @@ namespace TestConsoleApplication
     {
         #region Constans
 
-        private const string BASE_ADDRESS = "http://localhost:62141/";
-        private const string PRODUCT_CONTROLLER = "api/Products";
-        private const string PROD_TEMP = "?Code={0}";
+        private const string BaseAddress = "http://localhost:62141/";
+        private const string ProductController = "api/product";
+        private const string ProdTemp = "?Code={0}";
 
         #endregion
-
-        public partial class DtoProduct
-        {
-            public string ID { get; set; }
-            public string Name { get; set; }
-            public string Code { get; set; }
-            public int Category { get; set; }
-            public decimal Price { get; set; }
-
-            public static explicit operator DtoProduct(JToken JsonProd)
-            {
-                var prod = new DtoProduct();
-                prod.ID = JsonProd["ID"].ToString();
-                prod.Name = JsonProd["Name"].ToString();
-                prod.Code = JsonProd["Code"].ToString();
-                prod.Category = int.Parse(JsonProd["Category"].ToString());
-                prod.Price = decimal.Parse(JsonProd["Price"].ToString());
-
-                return prod;
-            }
-        }
-
 
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="args"></param>
-        static void Main(string[] args)
+        /// <param name="Args"></param>
+        static void Main(string[] Args)
         {
             HttpClient client = new HttpClient();
-            client.BaseAddress = new Uri(BASE_ADDRESS);
+            client.BaseAddress = new Uri(BaseAddress);
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
             // List all products
             var prodList = SendGet(client);
 
             // Update prod
-            var changedProduct = (DtoProduct) prodList[0];
-            changedProduct.Name = "changed";
+            var changedProduct = (Product) prodList[0];
+            changedProduct.Name += " changed";
             changedProduct.Price = 12;
-            changedProduct.Category = 0;
+            changedProduct.CategoryID = 0;
+            changedProduct.EAN = "1234";
 
             SendPut(client, changedProduct);
 
             // Add prod
-            var newProd = new DtoProduct();
-            newProd.ID = "9999999999";
+            var newProd = new Product();
             newProd.Name = "Created by client";
             newProd.Code = "Test99";
-            newProd.Category = 0;
+            newProd.CategoryID = 0;
             newProd.Price = 11;
+            newProd.EAN = "1234";
 
             SendPost(client, newProd);
 
@@ -77,7 +52,7 @@ namespace TestConsoleApplication
             Console.WriteLine(prodList.ToString());
 
             // Delete prod
-            SendDelete(client, "Test99");
+            //SendDelete(client, "Test99");
 
             Console.ReadLine();
         }
@@ -86,7 +61,7 @@ namespace TestConsoleApplication
         {
             JArray list = null;
 
-            HttpResponseMessage response = Client.GetAsync(PRODUCT_CONTROLLER).Result;
+            HttpResponseMessage response = Client.GetAsync(ProductController).Result;
             if (response.IsSuccessStatusCode)
                 list = response.Content.ReadAsAsync<JArray>().Result;
             else
@@ -95,9 +70,9 @@ namespace TestConsoleApplication
             return list;
         }
 
-        private static void SendPut(HttpClient Client, DtoProduct Product)
+        private static void SendPut(HttpClient Client, Product Product)
         {
-            string uri = string.Concat(PRODUCT_CONTROLLER, string.Format(PROD_TEMP, Product.Code));
+            string uri = string.Concat(ProductController, string.Format(ProdTemp, Product.Code));
             HttpResponseMessage response = Client.PutAsJsonAsync(uri, Product).Result;
 
             string msg = response.IsSuccessStatusCode ? 
@@ -107,9 +82,9 @@ namespace TestConsoleApplication
             Console.WriteLine(msg);
         }
 
-        private static void SendPost(HttpClient Client, DtoProduct Product)
+        private static void SendPost(HttpClient Client, Product Product)
         {
-            HttpResponseMessage response = Client.PostAsJsonAsync(PRODUCT_CONTROLLER, Product).Result;
+            HttpResponseMessage response = Client.PostAsJsonAsync(ProductController, Product).Result;
 
             string msg = response.IsSuccessStatusCode ?
                 "Success!" :
@@ -120,7 +95,7 @@ namespace TestConsoleApplication
 
         private static void SendDelete(HttpClient Client, string Code)
         {
-            string uri = string.Concat(PRODUCT_CONTROLLER, string.Format(PROD_TEMP, Code));
+            string uri = string.Concat(ProductController, string.Format(ProdTemp, Code));
             HttpResponseMessage response = Client.DeleteAsync(uri).Result;
 
             string msg = response.IsSuccessStatusCode ?
