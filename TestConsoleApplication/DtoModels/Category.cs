@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TestConsoleApplication.DtoModels
 {
-    public class Category
+    public class Category : IDTOModel
     {
         public int ID { get; set; }
         public string Name { get; set; }

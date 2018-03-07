@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TestConsoleApplication.DtoModels
 {
-    public class Vat
+    public class Vat : IDTOModel
     {
         public int ID { get; set; }
         public string Name { get; set; }

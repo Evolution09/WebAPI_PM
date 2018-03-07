@@ -6,9 +6,10 @@ using System.Threading.Tasks;
 
 namespace TestConsoleApplication.DtoModels
 {
-    public class Address
+    public class Address : IDTOModel
     {
         public int ID { get; set; }
+        public string Code { get; set; }
         public string Country { get; set; }
         public string City { get; set; }
         public string Street { get; set; }

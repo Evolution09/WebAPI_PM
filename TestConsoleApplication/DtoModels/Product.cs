@@ -7,7 +7,7 @@ using Newtonsoft.Json.Linq;
 
 namespace TestConsoleApplication.DtoModels
 {
-    public class Product
+    public class Product : IDTOModel
     {
         public int ID { get; set; }
         public string Name { get; set; }

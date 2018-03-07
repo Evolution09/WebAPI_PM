@@ -75,6 +75,7 @@
   <ItemGroup>
     <Compile Include="DtoModels\Address.cs" />
     <Compile Include="DtoModels\Category.cs" />
+    <Compile Include="DtoModels\IDTOModel.cs" />
     <Compile Include="DtoModels\Producent.cs" />
     <Compile Include="DtoModels\Product.cs" />
     <Compile Include="DtoModels\Vat.cs" />
