@@ -30,22 +30,22 @@ namespace WebAPI_PM.Controllers
             // loop, convert and return all descriptions 
             return ex.ApiDescriptions
                 // ignore self
-                .Where(d => d.ActionDescriptor.ControllerDescriptor.ControllerName != "ApiMethod")
-                .Select(d =>
+                .Where(D => D.ActionDescriptor.ControllerDescriptor.ControllerName != "ApiMethod")
+                .Select(D =>
                 {
                     // convert to a serializable structure
                     return new HelpMethod
                     {
-                        Parameters = d.ParameterDescriptions.Select(p => new HelpParameter
+                        Parameters = D.ParameterDescriptions.Select(P => new HelpParameter
                         {
-                            Name = p.Name,
-                            Type = p.ParameterDescriptor.ParameterType.FullName,
-                            IsOptional = p.ParameterDescriptor.IsOptional
+                            Name = P.Name,
+                            Type = P.ParameterDescriptor.ParameterType.FullName,
+                            IsOptional = P.ParameterDescriptor.IsOptional
                         }).ToArray(),
-                        Method = d.HttpMethod.ToString(),
-                        RelativePath = d.RelativePath,
-                        ReturnType = d.ResponseDescription.DeclaredType == null ?
-                            null : d.ResponseDescription.DeclaredType.ToString()
+                        Method = D.HttpMethod.ToString(),
+                        RelativePath = D.RelativePath,
+                        ReturnType = D.ResponseDescription.DeclaredType == null ?
+                            null : D.ResponseDescription.DeclaredType.ToString()
                     };
                 });
         }

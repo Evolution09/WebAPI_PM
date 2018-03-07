@@ -10,19 +10,28 @@ namespace WebAPI_PM.Controllers
 {
     public class CategoryController : ApiController
     {
-        private readonly MySQL_Prod m_Db = new MySQL_Prod();
+        private MySQL_Prod m_Db;
+        private MySQL_Prod Db
+        {
+            get
+            {
+                m_Db = new MySQL_Prod();
+                m_Db.Configuration.ProxyCreationEnabled = false;
+                return m_Db;
+            }
+        }
 
         // GET: api/Category
         public IQueryable<category_dict> GetCategory()
         {
-            return m_Db.category_dict;
+            return Db.category_dict;
         }
 
         // GET: api/Category/5
         [ResponseType(typeof(category_dict))]
         public IHttpActionResult GetCategory(string Code)
         {
-            category_dict categoryDict = m_Db.category_dict.AsEnumerable().FirstOrDefault(X => X.Code == Code);
+            category_dict categoryDict = Db.category_dict.AsEnumerable().FirstOrDefault(X => X.Code == Code);
             if (categoryDict == null)
                 return NotFound();
 
@@ -39,11 +48,11 @@ namespace WebAPI_PM.Controllers
             if (Code != Category.Code)
                 return BadRequest();
 
-            m_Db.Entry(Category).State = EntityState.Modified;
+            Db.Entry(Category).State = EntityState.Modified;
 
             try
             {
-                m_Db.SaveChanges();
+                Db.SaveChanges();
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -62,11 +71,11 @@ namespace WebAPI_PM.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            m_Db.category_dict.Add(Category);
+            Db.category_dict.Add(Category);
 
             try
             {
-                m_Db.SaveChanges();
+                Db.SaveChanges();
             }
             catch (DbUpdateException)
             {
@@ -82,12 +91,12 @@ namespace WebAPI_PM.Controllers
         [ResponseType(typeof(category_dict))]
         public IHttpActionResult DeleteCategory(string Code)
         {
-            category_dict categoryDict = m_Db.category_dict.AsEnumerable().FirstOrDefault(X => X.Code == Code);
+            category_dict categoryDict = Db.category_dict.AsEnumerable().FirstOrDefault(X => X.Code == Code);
             if (categoryDict == null)
                 return NotFound();
 
-            m_Db.category_dict.Remove(categoryDict);
-            m_Db.SaveChanges();
+            Db.category_dict.Remove(categoryDict);
+            Db.SaveChanges();
 
             return Ok(categoryDict);
         }
@@ -95,13 +104,13 @@ namespace WebAPI_PM.Controllers
         protected override void Dispose(bool Disposing)
         {
             if (Disposing)
-                m_Db.Dispose();
+                Db.Dispose();
             base.Dispose(Disposing);
         }
 
         private bool CategoryExists(string Code)
         {
-            return m_Db.category_dict.Count(E => E.Code == Code) > 0;
+            return Db.category_dict.Count(E => E.Code == Code) > 0;
         }
     }
 }

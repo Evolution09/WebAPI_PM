@@ -10,40 +10,60 @@ namespace WebAPI_PM.Controllers
 {
 	public class ProductController : ApiController
 	{
-	   private readonly MySQL_Prod m_Db = new MySQL_Prod();
-
-	    public IQueryable<product> GetProducts()
+	    private MySQL_Prod m_Db;
+	    private MySQL_Prod Db
 	    {
-	        return m_Db.products;
+	        get
+	        {
+	            m_Db = new MySQL_Prod();
+	            m_Db.Configuration.ProxyCreationEnabled = false;
+	            return m_Db;
+	        }
 	    }
+
+        public IQueryable<product> GetProducts()
+        {
+            var prods = Db.products;
+            prods.ForEachAsync(LoadAdditionalProductData);
+
+            return prods;
+        }
 
         // GET: api/Products/5
         [ResponseType(typeof(product))]
 	    public IHttpActionResult GetProduct(string Code)
 	    {
-	        var prod = m_Db.products.AsEnumerable().FirstOrDefault(X => X.Code == Code);
+	        var prod = Db.products.AsEnumerable().FirstOrDefault(X => X.Code == Code);
 	        if (prod == null)
 	            return NotFound();
 
-	        return Ok(prod);
+	        LoadAdditionalProductData(prod);
+
+            return Ok(prod);
 	    }
 
         // GET: api/Products/5
         [ResponseType(typeof(product))]
 	    public IQueryable<product> GetProductsByProducentCode(string Code)
         {
-            var prodIDs = m_Db.producents.AsEnumerable().Where(X => X.Code == Code).Select(X => X.ID);
-            return m_Db.products.AsEnumerable().ToList()
+            var prodIDs = Db.producents.AsEnumerable().Where(X => X.Code == Code).Select(X => X.ID);
+            var products = Db.products.AsEnumerable().ToList()
                 .FindAll(X => prodIDs.Contains(X.ProducentID)).AsQueryable();
+            products.ForEachAsync(LoadAdditionalProductData);
+
+            return products;
 	    }
 
         // GET: api/Products/5
         [ResponseType(typeof(product))]
 	    public IQueryable<product> GetProductsByCategoryCode(string Code)
         {
-            var catIDs = m_Db.category_dict.AsEnumerable().Where(X => X.Code == Code).Select(X => X.ID);
-            return m_Db.products.AsEnumerable().ToList()
+            var catIDs = Db.category_dict.AsEnumerable().Where(X => X.Code == Code).Select(X => X.ID);
+            var products = Db.products.AsEnumerable().ToList()
                 .FindAll(X => catIDs.Contains(X.CategoryID)).AsQueryable();
+            products.ForEachAsync(LoadAdditionalProductData);
+
+            return products;
 	    }
 
 	    // PUT: api/Products/5
@@ -51,20 +71,16 @@ namespace WebAPI_PM.Controllers
 	    public IHttpActionResult PutProduct(string Code, product Product)
 	    {
 	        if (!ModelState.IsValid)
-	        {
 	            return BadRequest(ModelState);
-	        }
 
 	        if (Code != Product.Code)
-	        {
 	            return BadRequest();
-	        }
 
-	        m_Db.Entry(Product).State = EntityState.Modified;
+	        Db.Entry(Product).State = EntityState.Modified;
 
 	        try
 	        {
-	            m_Db.SaveChanges();
+	            Db.SaveChanges();
 	        }
 	        catch (DbUpdateConcurrencyException)
 	        {
@@ -83,12 +99,10 @@ namespace WebAPI_PM.Controllers
 	    public IHttpActionResult PostProduct(product Product)
 	    {
 	        if (!ModelState.IsValid)
-	        {
 	            return BadRequest(ModelState);
-	        }
 
-	        m_Db.products.Add(Product);
-	        m_Db.SaveChanges();
+	        Db.products.Add(Product);
+	        Db.SaveChanges();
 
 	        return CreatedAtRoute("DefaultApi", new { id = Product.ID }, Product);
 	    }
@@ -97,27 +111,34 @@ namespace WebAPI_PM.Controllers
 	    [ResponseType(typeof(product))]
 	    public IHttpActionResult DeleteProduct(string Code)
 	    {
-	        var product = m_Db.products.AsEnumerable().FirstOrDefault(X => X.Code == Code);
+	        var product = Db.products.AsEnumerable().FirstOrDefault(X => X.Code == Code);
 	        if (product == null)
-	        {
 	            return NotFound();
-	        }
 
-	        m_Db.products.Remove(product);
-	        m_Db.SaveChanges();
+	        Db.products.Remove(product);
+	        Db.SaveChanges();
 
 	        return Ok(product);
 	    }
 
+	    private void LoadAdditionalProductData(product Product)
+	    {
+	        Product.category_dict = Db.category_dict.FirstOrDefault(C => C.ID == Product.CategoryID);
+	        Product.producent = Db.producents.FirstOrDefault(Pr => Pr.ID == Product.ProducentID);
+	        if (Product.producent?.AddressID != null)
+	            Product.producent.address = Db.addresses.FirstOrDefault(A => A.ID == Product.producent.AddressID.Value);
+	        Product.vat_dict = Db.vat_dict.FirstOrDefault(V => V.ID == Product.VATID);
+        }
+
         protected override void Dispose(bool Disposing)
         {
-            m_Db.Dispose();
+            Db.Dispose();
             base.Dispose(Disposing);
         }
 
 	    private bool ProductExists(string Code)
 	    {
-	        return m_Db.products.Count(E => E.Code == Code) > 0;
+	        return Db.products.Count(E => E.Code == Code) > 0;
 	    }
     }
 }

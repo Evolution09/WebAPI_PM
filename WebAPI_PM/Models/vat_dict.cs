@@ -14,9 +14,18 @@ namespace WebAPI_PM.Models
     
     public partial class vat_dict
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public vat_dict()
+        {
+            this.products = new HashSet<product>();
+        }
+    
         public int ID { get; set; }
         public string Name { get; set; }
         public string Code { get; set; }
         public decimal Value { get; set; }
+    
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<product> products { get; set; }
     }
 }

@@ -7,14 +7,14 @@ namespace WebAPI_PM
 {
     public static class WebApiConfig
     {
-        public static void Register(HttpConfiguration config)
+        public static void Register(HttpConfiguration Config)
         {
             // Web API configuration and services
 
             // Web API routes
-            config.MapHttpAttributeRoutes();
+            Config.MapHttpAttributeRoutes();
 
-            config.Routes.MapHttpRoute(
+            Config.Routes.MapHttpRoute(
                 name: "DefaultApi",
                 routeTemplate: "api/{controller}/{id}",
                 defaults: new { id = RouteParameter.Optional }

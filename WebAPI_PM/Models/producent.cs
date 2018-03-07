@@ -14,11 +14,21 @@ namespace WebAPI_PM.Models
     
     public partial class producent
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public producent()
+        {
+            this.products = new HashSet<product>();
+        }
+    
         public int ID { get; set; }
         public string Name { get; set; }
         public string Code { get; set; }
         public string Telephone { get; set; }
         public string Email { get; set; }
         public Nullable<int> AddressID { get; set; }
+    
+        public virtual address address { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<product> products { get; set; }
     }
 }

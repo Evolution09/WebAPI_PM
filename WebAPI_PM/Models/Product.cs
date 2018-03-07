@@ -7,11 +7,13 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
+
 namespace WebAPI_PM.Models
 {
     using System;
     using System.Collections.Generic;
-    
+    using System.ComponentModel.DataAnnotations.Schema;
+
     public partial class product
     {
         public int ID { get; set; }
@@ -23,5 +25,12 @@ namespace WebAPI_PM.Models
         public int VATID { get; set; }
         public string Description { get; set; }
         public decimal Price { get; set; }
+
+        [ForeignKey(nameof(CategoryID))]
+        public virtual category_dict category_dict { get; set; }
+        [ForeignKey(nameof(ProducentID))]
+        public virtual producent producent { get; set; }
+        [ForeignKey(nameof(VATID))]
+        public virtual vat_dict vat_dict { get; set; }
     }
 }

@@ -10,19 +10,28 @@ namespace WebAPI_PM.Controllers
 {
     public class VatController : ApiController
     {
-        private readonly MySQL_Prod m_Db = new MySQL_Prod();
+        private MySQL_Prod m_Db;
+        private MySQL_Prod Db
+        {
+            get
+            {
+                m_Db = new MySQL_Prod();
+                m_Db.Configuration.ProxyCreationEnabled = false;
+                return m_Db;
+            }
+        }
 
         // GET: api/Vat
         public IQueryable<vat_dict> GetVat()
         {
-            return m_Db.vat_dict;
+            return Db.vat_dict;
         }
 
         // GET: api/Vat/5
         [ResponseType(typeof(vat_dict))]
         public IHttpActionResult GetVat(string Code)
         {
-            vat_dict vatDict = m_Db.vat_dict.AsEnumerable().FirstOrDefault(X => X.Code == Code);
+            vat_dict vatDict = Db.vat_dict.AsEnumerable().FirstOrDefault(X => X.Code == Code);
             if (vatDict == null)
                 return NotFound();
 
@@ -39,11 +48,11 @@ namespace WebAPI_PM.Controllers
             if (Code != VatDict.Code)
                 return BadRequest();
 
-            m_Db.Entry(VatDict).State = EntityState.Modified;
+            Db.Entry(VatDict).State = EntityState.Modified;
 
             try
             {
-                m_Db.SaveChanges();
+                Db.SaveChanges();
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -62,11 +71,11 @@ namespace WebAPI_PM.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            m_Db.vat_dict.Add(VatDict);
+            Db.vat_dict.Add(VatDict);
 
             try
             {
-                m_Db.SaveChanges();
+                Db.SaveChanges();
             }
             catch (DbUpdateException)
             {
@@ -82,12 +91,12 @@ namespace WebAPI_PM.Controllers
         [ResponseType(typeof(vat_dict))]
         public IHttpActionResult DeleteVat(string Code)
         {
-            vat_dict vatDict = m_Db.vat_dict.AsEnumerable().FirstOrDefault(X => X.Code == Code);
+            vat_dict vatDict = Db.vat_dict.AsEnumerable().FirstOrDefault(X => X.Code == Code);
             if (vatDict == null)
                 return NotFound();
 
-            m_Db.vat_dict.Remove(vatDict);
-            m_Db.SaveChanges();
+            Db.vat_dict.Remove(vatDict);
+            Db.SaveChanges();
 
             return Ok(vatDict);
         }
@@ -95,13 +104,13 @@ namespace WebAPI_PM.Controllers
         protected override void Dispose(bool Disposing)
         {
             if (Disposing)
-                m_Db.Dispose();
+                Db.Dispose();
             base.Dispose(Disposing);
         }
 
         private bool VatExists(string Code)
         {
-            return m_Db.vat_dict.Count(E => E.Code == Code) > 0;
+            return Db.vat_dict.Count(E => E.Code == Code) > 0;
         }
     }
 }

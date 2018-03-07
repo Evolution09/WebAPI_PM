@@ -10,7 +10,7 @@ namespace WebAPI_PM
             GlobalConfiguration.Configure(WebApiConfig.Register);
         }
 
-        public static void RegisterRoutes(RouteCollection routes)
+        public static void RegisterRoutes(RouteCollection Routes)
         {
         }
     }

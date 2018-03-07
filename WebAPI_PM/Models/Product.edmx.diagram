@@ -10,7 +10,11 @@
         <EntityTypeShape EntityType="Product.producent" Width="1.5" PointX="0.75" PointY="3.75" IsExpanded="true" />
         <EntityTypeShape EntityType="Product.product" Width="1.5" PointX="2.75" PointY="3.75" IsExpanded="true" />
         <EntityTypeShape EntityType="Product.sys_config" Width="1.5" PointX="4.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="Product.vat_dict" Width="1.5" PointX="4.75" PointY="3.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="Product.vat_dict" Width="1.5" PointX="5.875" PointY="3.375" IsExpanded="true" />
+        <AssociationConnector Association="Product.addr_id" />
+        <AssociationConnector Association="Product.category" />
+        <AssociationConnector Association="Product.producent1" />
+        <AssociationConnector Association="Product.vat" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

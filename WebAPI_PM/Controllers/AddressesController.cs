@@ -10,12 +10,21 @@ namespace WebAPI_PM.Controllers
 {
     public class AddressesController : ApiController
     {
-        private readonly MySQL_Prod m_Db = new MySQL_Prod();
+        private MySQL_Prod m_Db;
+        private MySQL_Prod Db
+        {
+            get
+            {
+                m_Db = new MySQL_Prod();
+                m_Db.Configuration.ProxyCreationEnabled = false;
+                return m_Db;
+            }
+        }
 
         // GET: api/Addresses
         public IQueryable<address> GetAddresses()
         {
-            return m_Db.addresses;
+            return Db.addresses;
         }
 
         // PUT: api/Addresses/5
@@ -28,11 +37,11 @@ namespace WebAPI_PM.Controllers
             if (Id != Address.ID)
                 return BadRequest();
 
-            m_Db.Entry(Address).State = EntityState.Modified;
+            Db.Entry(Address).State = EntityState.Modified;
 
             try
             {
-                m_Db.SaveChanges();
+                Db.SaveChanges();
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -51,11 +60,11 @@ namespace WebAPI_PM.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            m_Db.addresses.Add(Address);
+            Db.addresses.Add(Address);
 
             try
             {
-                m_Db.SaveChanges();
+                Db.SaveChanges();
             }
             catch (DbUpdateException)
             {
@@ -69,14 +78,14 @@ namespace WebAPI_PM.Controllers
 
         // DELETE: api/Addresses/5
         [ResponseType(typeof(address))]
-        public IHttpActionResult DeletAaddress(int Id)
+        public IHttpActionResult DeleteAddress(int Id)
         {
-            address address = m_Db.addresses.Find(Id);
+            address address = Db.addresses.Find(Id);
             if (address == null)
                 return NotFound();
 
-            m_Db.addresses.Remove(address);
-            m_Db.SaveChanges();
+            Db.addresses.Remove(address);
+            Db.SaveChanges();
 
             return Ok(address);
         }
@@ -84,13 +93,13 @@ namespace WebAPI_PM.Controllers
         protected override void Dispose(bool Disposing)
         {
             if (Disposing)
-                m_Db.Dispose();
+                Db.Dispose();
             base.Dispose(Disposing);
         }
 
         private bool AddressExists(int Id)
         {
-            return m_Db.addresses.Count(E => E.ID == Id) > 0;
+            return Db.addresses.Count(E => E.ID == Id) > 0;
         }
     }
 }

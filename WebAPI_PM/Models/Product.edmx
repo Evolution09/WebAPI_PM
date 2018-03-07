@@ -4,15 +4,15 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="Product.Store" Provider="MySql.Data.MySqlClient" ProviderManifestToken="5.7" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="Product.Store" Provider="MySql.Data.MySqlClient" ProviderManifestToken="5.7" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="address">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
-          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Country" Type="varchar" MaxLength="50" Nullable="false" />
-          <Property Name="City" Type="varchar" MaxLength="50" />
-          <Property Name="Street" Type="varchar" MaxLength="50" />
+          <Property Name="City" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Street" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="Street_details" Type="varchar" MaxLength="10" />
           <Property Name="ApartamentNo" Type="varchar" MaxLength="10" />
         </EntityType>
@@ -20,7 +20,7 @@
           <Key>
             <PropertyRef Name="ID" />
           </Key>
-          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Name" Type="varchar" MaxLength="100" Nullable="false" />
           <Property Name="Code" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="Description" Type="varchar" MaxLength="300" />
@@ -29,7 +29,7 @@
           <Key>
             <PropertyRef Name="ID" />
           </Key>
-          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Name" Type="varchar" MaxLength="100" Nullable="false" />
           <Property Name="Code" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="Telephone" Type="varchar" MaxLength="9" />
@@ -63,11 +63,59 @@
           <Key>
             <PropertyRef Name="ID" />
           </Key>
-          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Name" Type="varchar" MaxLength="100" Nullable="false" />
           <Property Name="Code" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="Value" Type="decimal" Precision="10" Scale="0" Nullable="false" />
         </EntityType>
+        <Association Name="addr_id">
+          <End Role="address" Type="Self.address" Multiplicity="0..1" />
+          <End Role="producent" Type="Self.producent" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="address">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="producent">
+              <PropertyRef Name="AddressID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="category">
+          <End Role="category_dict" Type="Self.category_dict" Multiplicity="1" />
+          <End Role="product" Type="Self.product" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="category_dict">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="product">
+              <PropertyRef Name="CategoryID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="producent1">
+          <End Role="producent" Type="Self.producent" Multiplicity="1" />
+          <End Role="product" Type="Self.product" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="producent">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="product">
+              <PropertyRef Name="ProducentID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="vat">
+          <End Role="vat_dict" Type="Self.vat_dict" Multiplicity="1" />
+          <End Role="product" Type="Self.product" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="vat_dict">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="product">
+              <PropertyRef Name="VATID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityContainer Name="ProductStoreContainer">
           <EntitySet Name="address" EntityType="Self.address" Schema="sys" store:Type="Tables" />
           <EntitySet Name="category_dict" EntityType="Self.category_dict" Schema="sys" store:Type="Tables" />
@@ -75,9 +123,24 @@
           <EntitySet Name="product" EntityType="Self.product" Schema="sys" store:Type="Tables" />
           <EntitySet Name="sys_config" EntityType="Self.sys_config" Schema="sys" store:Type="Tables" />
           <EntitySet Name="vat_dict" EntityType="Self.vat_dict" Schema="sys" store:Type="Tables" />
+          <AssociationSet Name="addr_id" Association="Self.addr_id">
+            <End Role="address" EntitySet="address" />
+            <End Role="producent" EntitySet="producent" />
+          </AssociationSet>
+          <AssociationSet Name="category" Association="Self.category">
+            <End Role="category_dict" EntitySet="category_dict" />
+            <End Role="product" EntitySet="product" />
+          </AssociationSet>
+          <AssociationSet Name="producent1" Association="Self.producent1">
+            <End Role="producent" EntitySet="producent" />
+            <End Role="product" EntitySet="product" />
+          </AssociationSet>
+          <AssociationSet Name="vat" Association="Self.vat">
+            <End Role="vat_dict" EntitySet="vat_dict" />
+            <End Role="product" EntitySet="product" />
+          </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="Product" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -87,10 +150,11 @@
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" />
           <Property Name="Country" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="City" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="Street" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="City" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Street" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="Street_details" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="ApartamentNo" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="producents" Relationship="Product.addr_id" FromRole="address" ToRole="producent" />
         </EntityType>
         <EntityType Name="category_dict">
           <Key>
@@ -100,6 +164,7 @@
           <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="Code" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="Description" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="products" Relationship="Product.category" FromRole="category_dict" ToRole="product" />
         </EntityType>
         <EntityType Name="producent">
           <Key>
@@ -111,6 +176,8 @@
           <Property Name="Telephone" Type="String" MaxLength="9" FixedLength="false" Unicode="false" />
           <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="AddressID" Type="Int32" />
+          <NavigationProperty Name="address" Relationship="Product.addr_id" FromRole="producent" ToRole="address" />
+          <NavigationProperty Name="products" Relationship="Product.producent1" FromRole="producent" ToRole="product" />
         </EntityType>
         <EntityType Name="product">
           <Key>
@@ -125,6 +192,9 @@
           <Property Name="VATID" Type="Int32" Nullable="false" />
           <Property Name="Description" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
           <Property Name="Price" Type="Decimal" Nullable="false" />
+          <NavigationProperty Name="category_dict" Relationship="Product.category" FromRole="product" ToRole="category_dict" />
+          <NavigationProperty Name="producent" Relationship="Product.producent1" FromRole="product" ToRole="producent" />
+          <NavigationProperty Name="vat_dict" Relationship="Product.vat" FromRole="product" ToRole="vat_dict" />
         </EntityType>
         <EntityType Name="sys_config">
           <Key>
@@ -143,6 +213,7 @@
           <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="Code" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="Value" Type="Decimal" Nullable="false" />
+          <NavigationProperty Name="products" Relationship="Product.vat" FromRole="vat_dict" ToRole="product" />
         </EntityType>
         <EntityContainer Name="MySQL_Prod" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="addresses" EntityType="Self.address" />
@@ -151,7 +222,71 @@
           <EntitySet Name="products" EntityType="Self.product" />
           <EntitySet Name="sys_config" EntityType="Self.sys_config" />
           <EntitySet Name="vat_dict" EntityType="Self.vat_dict" />
+          <AssociationSet Name="addr_id" Association="Product.addr_id">
+            <End Role="address" EntitySet="addresses" />
+            <End Role="producent" EntitySet="producents" />
+          </AssociationSet>
+          <AssociationSet Name="category" Association="Product.category">
+            <End Role="category_dict" EntitySet="category_dict" />
+            <End Role="product" EntitySet="products" />
+          </AssociationSet>
+          <AssociationSet Name="producent1" Association="Product.producent1">
+            <End Role="producent" EntitySet="producents" />
+            <End Role="product" EntitySet="products" />
+          </AssociationSet>
+          <AssociationSet Name="vat" Association="Product.vat">
+            <End Role="vat_dict" EntitySet="vat_dict" />
+            <End Role="product" EntitySet="products" />
+          </AssociationSet>
         </EntityContainer>
+        <Association Name="addr_id">
+          <End Type="Product.address" Role="address" Multiplicity="0..1" />
+          <End Type="Product.producent" Role="producent" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="address">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="producent">
+              <PropertyRef Name="AddressID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="category">
+          <End Type="Product.category_dict" Role="category_dict" Multiplicity="1" />
+          <End Type="Product.product" Role="product" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="category_dict">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="product">
+              <PropertyRef Name="CategoryID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="producent1">
+          <End Type="Product.producent" Role="producent" Multiplicity="1" />
+          <End Type="Product.product" Role="product" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="producent">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="product">
+              <PropertyRef Name="ProducentID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="vat">
+          <End Type="Product.vat_dict" Role="vat_dict" Multiplicity="1" />
+          <End Type="Product.product" Role="product" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="vat_dict">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="product">
+              <PropertyRef Name="VATID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
