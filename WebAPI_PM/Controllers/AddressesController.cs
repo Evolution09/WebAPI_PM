@@ -21,14 +21,14 @@ namespace WebAPI_PM.Controllers
             }
         }
 
-        // GET: api/Addresses
+        [Route("address/")]
         public IQueryable<address> GetAddresses()
         {
             return Db.addresses;
         }
 
-        // PUT: api/Addresses/5
         [ResponseType(typeof(void))]
+        [Route("address/{Id}")]
         public IHttpActionResult PutAddress(int Id, address Address)
         {
             if (!ModelState.IsValid)
@@ -53,8 +53,8 @@ namespace WebAPI_PM.Controllers
             return StatusCode(HttpStatusCode.NoContent);
         }
 
-        // POST: api/Addresses
         [ResponseType(typeof(address))]
+        [Route("address/")]
         public IHttpActionResult PostAddress(address Address)
         {
             if (!ModelState.IsValid)
@@ -76,8 +76,8 @@ namespace WebAPI_PM.Controllers
             return CreatedAtRoute("DefaultApi", new { id = Address.ID }, Address);
         }
 
-        // DELETE: api/Addresses/5
         [ResponseType(typeof(address))]
+        [Route("address/{Id}")]
         public IHttpActionResult DeleteAddress(int Id)
         {
             address address = Db.addresses.Find(Id);

@@ -21,7 +21,7 @@ namespace WebAPI_PM.Controllers
             }
         }
 
-        // GET: api/Producents
+        [Route("producent/")]
         public IQueryable<producent> GetProducents()
         {
             var producents = Db.producents;
@@ -30,8 +30,8 @@ namespace WebAPI_PM.Controllers
             return producents;
         }
 
-        // GET: api/Producents/5
         [ResponseType(typeof(producent))]
+        [Route("producent/{code}")]
         public IHttpActionResult GetProducent(string Code)
         {
             producent producent = Db.producents.AsEnumerable().FirstOrDefault(X => X.Code == Code);
@@ -43,32 +43,20 @@ namespace WebAPI_PM.Controllers
             return Ok(producent);
         }
 
-        // GET: api/Producents/5
-        [ResponseType(typeof(producent))]
-        public IQueryable<producent> GetProducentsByCountry(string Country)
+        [ResponseType(typeof(product))]
+        [Route("producent/{code}")]
+        public IQueryable<product> GetProductsByProducentCode(string Code)
         {
-            var addrIDs = Db.addresses.AsEnumerable().Where(X => X.Country == Country).Select(X => X.ID);
-            var producents = Db.producents.AsEnumerable().ToList()
-                .FindAll(X => X.AddressID.HasValue && addrIDs.Contains(X.AddressID.Value)).AsQueryable();
-            producents.ForEachAsync(LoadAdditionalProducentsData);
+            var prodIDs = Db.producents.AsEnumerable().Where(X => X.Code == Code).Select(X => X.ID);
+            var products = Db.products.AsEnumerable().ToList()
+                .FindAll(X => prodIDs.Contains(X.ProducentID)).AsQueryable();
+            products.ForEachAsync(LoadAdditionalProductData);
 
-            return producents;
+            return products;
         }
 
-        // GET: api/Producents/5
-        [ResponseType(typeof(producent))]
-        public IQueryable<producent> GetProducentsByCity(string City)
-        {
-            var addrIDs = Db.addresses.AsEnumerable().Where(X => X.City == City).Select(X => X.ID);
-            var producents = Db.producents.AsEnumerable().ToList()
-                .FindAll(X => X.AddressID.HasValue && addrIDs.Contains(X.AddressID.Value)).AsQueryable();
-            producents.ForEachAsync(LoadAdditionalProducentsData);
-
-            return producents;
-        }
-
-        // PUT: api/Producents/5
         [ResponseType(typeof(void))]
+        [Route("producent/{code}")]
         public IHttpActionResult PutProducent(string Code, producent Producent)
         {
             if (!ModelState.IsValid)
@@ -93,8 +81,8 @@ namespace WebAPI_PM.Controllers
             return StatusCode(HttpStatusCode.NoContent);
         }
 
-        // POST: api/Producents
         [ResponseType(typeof(producent))]
+        [Route("producent/")]
         public IHttpActionResult PostProducent(producent Producent)
         {
             if (!ModelState.IsValid)
@@ -116,8 +104,8 @@ namespace WebAPI_PM.Controllers
             return CreatedAtRoute("DefaultApi", new { id = Producent.ID }, Producent);
         }
 
-        // DELETE: api/Producents/5
         [ResponseType(typeof(producent))]
+        [Route("producent/{code}")]
         public IHttpActionResult DeleteProducent(string Code)
         {
             producent producent = Db.producents.AsEnumerable().FirstOrDefault(X => X.Code == Code);
@@ -134,6 +122,15 @@ namespace WebAPI_PM.Controllers
         {
             if (Producent.AddressID != null)
                 Producent.address = Db.addresses.FirstOrDefault(A => A.ID == Producent.AddressID.Value);
+        }
+
+        private void LoadAdditionalProductData(product Product)
+        {
+            Product.category_dict = Db.category_dict.FirstOrDefault(C => C.ID == Product.CategoryID);
+            Product.producent = Db.producents.FirstOrDefault(Pr => Pr.ID == Product.ProducentID);
+            if (Product.producent?.AddressID != null)
+                Product.producent.address = Db.addresses.FirstOrDefault(A => A.ID == Product.producent.AddressID.Value);
+            Product.vat_dict = Db.vat_dict.FirstOrDefault(V => V.ID == Product.VATID);
         }
 
         protected override void Dispose(bool Disposing)

@@ -21,6 +21,7 @@ namespace WebAPI_PM.Controllers
 	        }
 	    }
 
+	    [Route("product/")]
         public IQueryable<product> GetProducts()
         {
             var prods = Db.products;
@@ -29,9 +30,9 @@ namespace WebAPI_PM.Controllers
             return prods;
         }
 
-        // GET: api/Products/5
         [ResponseType(typeof(product))]
-	    public IHttpActionResult GetProduct(string Code)
+        [Route("product/{code}")]
+        public IHttpActionResult GetProduct(string Code)
 	    {
 	        var prod = Db.products.AsEnumerable().FirstOrDefault(X => X.Code == Code);
 	        if (prod == null)
@@ -42,33 +43,9 @@ namespace WebAPI_PM.Controllers
             return Ok(prod);
 	    }
 
-        // GET: api/Products/5
-        [ResponseType(typeof(product))]
-	    public IQueryable<product> GetProductsByProducentCode(string Code)
-        {
-            var prodIDs = Db.producents.AsEnumerable().Where(X => X.Code == Code).Select(X => X.ID);
-            var products = Db.products.AsEnumerable().ToList()
-                .FindAll(X => prodIDs.Contains(X.ProducentID)).AsQueryable();
-            products.ForEachAsync(LoadAdditionalProductData);
-
-            return products;
-	    }
-
-        // GET: api/Products/5
-        [ResponseType(typeof(product))]
-	    public IQueryable<product> GetProductsByCategoryCode(string Code)
-        {
-            var catIDs = Db.category_dict.AsEnumerable().Where(X => X.Code == Code).Select(X => X.ID);
-            var products = Db.products.AsEnumerable().ToList()
-                .FindAll(X => catIDs.Contains(X.CategoryID)).AsQueryable();
-            products.ForEachAsync(LoadAdditionalProductData);
-
-            return products;
-	    }
-
-	    // PUT: api/Products/5
 	    [ResponseType(typeof(void))]
-	    public IHttpActionResult PutProduct(string Code, product Product)
+	    [Route("product/{code}")]
+        public IHttpActionResult PutProduct(string Code, product Product)
 	    {
 	        if (!ModelState.IsValid)
 	            return BadRequest(ModelState);
@@ -94,9 +71,9 @@ namespace WebAPI_PM.Controllers
 	        return StatusCode(HttpStatusCode.NoContent);
 	    }
 
-	    // POST: api/Products
 	    [ResponseType(typeof(product))]
-	    public IHttpActionResult PostProduct(product Product)
+	    [Route("product/")]
+        public IHttpActionResult PostProduct(product Product)
 	    {
 	        if (!ModelState.IsValid)
 	            return BadRequest(ModelState);
@@ -107,9 +84,9 @@ namespace WebAPI_PM.Controllers
 	        return CreatedAtRoute("DefaultApi", new { id = Product.ID }, Product);
 	    }
 
-	    // DELETE: api/Products/5
 	    [ResponseType(typeof(product))]
-	    public IHttpActionResult DeleteProduct(string Code)
+	    [Route("product/{code}")]
+        public IHttpActionResult DeleteProduct(string Code)
 	    {
 	        var product = Db.products.AsEnumerable().FirstOrDefault(X => X.Code == Code);
 	        if (product == null)

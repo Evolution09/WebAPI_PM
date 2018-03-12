@@ -21,14 +21,14 @@ namespace WebAPI_PM.Controllers
             }
         }
 
-        // GET: api/Category
+        [Route("category/")]
         public IQueryable<category_dict> GetCategory()
         {
             return Db.category_dict;
         }
 
-        // GET: api/Category/5
         [ResponseType(typeof(category_dict))]
+        [Route("category/{code}")]
         public IHttpActionResult GetCategory(string Code)
         {
             category_dict categoryDict = Db.category_dict.AsEnumerable().FirstOrDefault(X => X.Code == Code);
@@ -38,8 +38,20 @@ namespace WebAPI_PM.Controllers
             return Ok(categoryDict);
         }
 
-        // PUT: api/Category/5
+        [ResponseType(typeof(product))]
+        [Route("category/{code}")]
+        public IQueryable<product> GetProductsByCategoryCode(string Code)
+        {
+            var catIDs = Db.category_dict.AsEnumerable().Where(X => X.Code == Code).Select(X => X.ID);
+            var products = Db.products.AsEnumerable().ToList()
+                .FindAll(X => catIDs.Contains(X.CategoryID)).AsQueryable();
+            products.ForEachAsync(LoadAdditionalProductData);
+
+            return products;
+        }
+
         [ResponseType(typeof(void))]
+        [Route("category/{code}")]
         public IHttpActionResult PutCategory(string Code, category_dict Category)
         {
             if (!ModelState.IsValid)
@@ -64,8 +76,8 @@ namespace WebAPI_PM.Controllers
             return StatusCode(HttpStatusCode.NoContent);
         }
 
-        // POST: api/Category
         [ResponseType(typeof(category_dict))]
+        [Route("category/")]
         public IHttpActionResult PostCategory(category_dict Category)
         {
             if (!ModelState.IsValid)
@@ -87,8 +99,8 @@ namespace WebAPI_PM.Controllers
             return CreatedAtRoute("DefaultApi", new { id = Category.ID }, Category);
         }
 
-        // DELETE: api/Category/5
         [ResponseType(typeof(category_dict))]
+        [Route("category/{code}")]
         public IHttpActionResult DeleteCategory(string Code)
         {
             category_dict categoryDict = Db.category_dict.AsEnumerable().FirstOrDefault(X => X.Code == Code);
@@ -99,6 +111,15 @@ namespace WebAPI_PM.Controllers
             Db.SaveChanges();
 
             return Ok(categoryDict);
+        }
+
+        private void LoadAdditionalProductData(product Product)
+        {
+            Product.category_dict = Db.category_dict.FirstOrDefault(C => C.ID == Product.CategoryID);
+            Product.producent = Db.producents.FirstOrDefault(Pr => Pr.ID == Product.ProducentID);
+            if (Product.producent?.AddressID != null)
+                Product.producent.address = Db.addresses.FirstOrDefault(A => A.ID == Product.producent.AddressID.Value);
+            Product.vat_dict = Db.vat_dict.FirstOrDefault(V => V.ID == Product.VATID);
         }
 
         protected override void Dispose(bool Disposing)

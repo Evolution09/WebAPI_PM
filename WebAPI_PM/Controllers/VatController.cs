@@ -21,14 +21,14 @@ namespace WebAPI_PM.Controllers
             }
         }
 
-        // GET: api/Vat
+        [Route("vat/")]
         public IQueryable<vat_dict> GetVat()
         {
             return Db.vat_dict;
         }
 
-        // GET: api/Vat/5
         [ResponseType(typeof(vat_dict))]
+        [Route("vat/{code}")]
         public IHttpActionResult GetVat(string Code)
         {
             vat_dict vatDict = Db.vat_dict.AsEnumerable().FirstOrDefault(X => X.Code == Code);
@@ -38,8 +38,8 @@ namespace WebAPI_PM.Controllers
             return Ok(vatDict);
         }
 
-        // PUT: api/Vat/5
         [ResponseType(typeof(void))]
+        [Route("vat/{code}")]
         public IHttpActionResult PutVat(string Code, vat_dict VatDict)
         {
             if (!ModelState.IsValid)
@@ -64,8 +64,8 @@ namespace WebAPI_PM.Controllers
             return StatusCode(HttpStatusCode.NoContent);
         }
 
-        // POST: api/Vat
         [ResponseType(typeof(vat_dict))]
+        [Route("vat/")]
         public IHttpActionResult PostVat(vat_dict VatDict)
         {
             if (!ModelState.IsValid)
@@ -87,8 +87,8 @@ namespace WebAPI_PM.Controllers
             return CreatedAtRoute("DefaultApi", new { id = VatDict.ID }, VatDict);
         }
 
-        // DELETE: api/Vat/5
         [ResponseType(typeof(vat_dict))]
+        [Route("vat/{code}")]
         public IHttpActionResult DeleteVat(string Code)
         {
             vat_dict vatDict = Db.vat_dict.AsEnumerable().FirstOrDefault(X => X.Code == Code);
