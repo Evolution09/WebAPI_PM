@@ -44,7 +44,7 @@ namespace WebAPI_PM.Controllers
         }
 
         [ResponseType(typeof(product))]
-        [Route("producent/{code}")]
+        [Route("producent/{code}/product")]
         public IQueryable<product> GetProductsByProducentCode(string Code)
         {
             var prodIDs = Db.producents.AsEnumerable().Where(X => X.Code == Code).Select(X => X.ID);

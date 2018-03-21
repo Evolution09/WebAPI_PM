@@ -39,7 +39,7 @@ namespace WebAPI_PM.Controllers
         }
 
         [ResponseType(typeof(product))]
-        [Route("category/{code}")]
+        [Route("category/{code}/product")]
         public IQueryable<product> GetProductsByCategoryCode(string Code)
         {
             var catIDs = Db.category_dict.AsEnumerable().Where(X => X.Code == Code).Select(X => X.ID);
